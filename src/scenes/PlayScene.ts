@@ -34,12 +34,18 @@ class PlayScene extends Phaser.Scene {
             }
 
             this.startTrigger.body.reset(9999, 9999)
-            this.time.addEvent({
-                delay: 1000/60,
+
+            const groundRollOutEvent = this.time.addEvent({
+                delay: 1000 / 60,
                 loop: true,
                 callback: () => {
-                    if (this.ground.width <= this.gameWidth) {
-                        this.ground.width += (17 * 2)
+                    this.player.setVelocityX(80)
+                    this.ground.width += (17 * 2)
+
+                    if (this.ground.width >= this.gameWidth) {
+                        groundRollOutEvent.remove()
+                        this.ground.width = this.gameWidth
+                        this.player.setVelocityX(0)
                     }
                 }
             })
