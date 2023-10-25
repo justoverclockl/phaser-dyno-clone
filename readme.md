@@ -1,4 +1,6 @@
-# Simple Phaser3 with TS Template
+# Simple Google Dyno game clone made with PHASER
+
+![Alt text](https://user-images.githubusercontent.com/99226172/226126302-0f1cb56a-6f9a-48c1-b6c8-6bb530778c13.png "marco colia dyno game clone made with phaser")
 
 ## Setup
 
@@ -9,7 +11,7 @@
 3. Navigate into the project directory
 
 ```bash
-  $ cd phaser3-typescript-simple-template
+  $ cd phaser-dyno-clone
 ```
 
 4. Install the requirements
@@ -22,4 +24,9 @@
 
 ```bash
   $ npm run dev
+```
+6. Visualize the game
+
+```bash
+  In your browser open this address: http://localhost:8080
 ```
