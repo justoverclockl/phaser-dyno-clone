@@ -31,6 +31,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.setVelocityY(-1600)
         }
 
+        if (!(this.scene as any).isGameRunning) {
+            return;
+        }
+
         // if we are jumping, then stop run animation
         if (this.body.deltaAbsY() > 0) {
             this.anims.stop()
