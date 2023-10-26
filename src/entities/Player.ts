@@ -4,7 +4,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     scene: GameScene
     constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 'dino-idle');
+        super(scene, x, y, 'dino-run');
 
         scene.add.existing(this)
         scene.physics.add.existing(this)
