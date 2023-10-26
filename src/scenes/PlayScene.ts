@@ -12,6 +12,7 @@ class PlayScene extends GameScene {
 
     spawnInterval: number = 1500
     spawnTime: number = 0
+    obstacleSpeed: number = -1
 
 
     constructor() {
@@ -57,12 +58,16 @@ class PlayScene extends GameScene {
     }
     // delta is time from the last frame, time is the entire time
     update(time: number, delta: number) {
+        if (!this.isGameRunning) { return; }
+
         this.spawnTime += delta
 
         if (this.spawnTime >= this.spawnInterval) {
             this.spawnObstacles()
             this.spawnTime = 0
         }
+
+        Phaser.Actions.IncX(this.obstacles.getChildren(), this.obstacleSpeed)
     }
 
     createPlayer() {
