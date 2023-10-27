@@ -12,7 +12,7 @@ class PlayScene extends GameScene {
 
     spawnInterval: number = 1500
     spawnTime: number = 0
-    obstacleSpeed: number = 2
+    gameSpeed: number = 2
 
 
     constructor() {
@@ -29,6 +29,12 @@ class PlayScene extends GameScene {
             .sprite(0, 10, null)
             .setAlpha(0)
             .setOrigin(0, 1)
+
+        this.physics.add.collider(this.obstacles, this.player, () => {
+            this.player.anims.stop()
+            this.physics.pause()
+            this.isGameRunning = false
+        })
 
         this.physics.add.overlap(this.startTrigger, this.player, () => {
             if (this.startTrigger.y === 10) {
@@ -67,7 +73,7 @@ class PlayScene extends GameScene {
             this.spawnTime = 0
         }
 
-        Phaser.Actions.IncX(this.obstacles.getChildren(), -this.obstacleSpeed)
+        Phaser.Actions.IncX(this.obstacles.getChildren(), -this.gameSpeed)
 
         // remove the obstacle from the array to avoid performance issues
         this.obstacles.getChildren().forEach((obstacle: SpriteWithDynamicBody) => {
@@ -75,6 +81,8 @@ class PlayScene extends GameScene {
                 this.obstacles.remove(obstacle)
             }
         })
+
+        this.ground.tilePositionX += this.gameSpeed
     }
 
     createPlayer() {
@@ -93,6 +101,7 @@ class PlayScene extends GameScene {
 
         this.obstacles
             .create(distance, this.gameHeight, `cactus-${cactuses}`)
+            .setImmovable()
             .setOrigin(0,1)
     }
 }
