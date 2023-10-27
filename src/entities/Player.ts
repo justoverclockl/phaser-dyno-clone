@@ -60,6 +60,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             repeat: -1
         })
     }
+
+    die() {
+        this.anims.pause()
+        this.setTexture('dino-hurt')
+    }
 }
 
 export default Player;
