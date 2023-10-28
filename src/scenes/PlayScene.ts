@@ -27,6 +27,7 @@ class PlayScene extends GameScene {
         this.createPlayer()
         this.createObstacles()
         this.createGameOverContainer()
+        this.createAnimations()
 
         this.handleGameStart()
         this.handleObstacleCollision()
@@ -81,25 +82,38 @@ class PlayScene extends GameScene {
             .setAlpha(0)
     }
 
+    createAnimations() {
+        this.anims.create({
+            key: 'enemy-bird-fly',
+            frames: this.anims.generateFrameNumbers('enemy-bird'),
+            frameRate: 6,
+            repeat: -1
+        })
+    }
+
     spawnObstacles() {
         const obstacleCount = PRELOAD_CONFIG.cactusCount + PRELOAD_CONFIG.birdsCount
         const obstacleNum = Math.floor(Math.random() * obstacleCount) + 1
-        const distance = Phaser.Math.Between(600,900)
+        const distance = Phaser.Math.Between(150,300)
+        let obstacle;
 
         if (obstacleNum > PRELOAD_CONFIG.cactusCount) {
             const enemyPossibleHeight = [20, 70]
             const enemyHeight = enemyPossibleHeight[Math.floor(Math.random() * 2)]
 
-            this.obstacles
-                .create(distance, this.gameHeight - enemyHeight, 'enemy-bird')
-                .setImmovable()
-                .setOrigin(0,1)
+            obstacle = this.obstacles
+                .create(this.gameWidth + distance, this.gameHeight - enemyHeight, 'enemy-bird')
+
+            obstacle.play('enemy-bird-fly', true)
         } else {
-            this.obstacles
-                .create(distance, this.gameHeight, `cactus-${obstacleNum}`)
-                .setImmovable()
-                .setOrigin(0,1)
+            obstacle = this.obstacles
+                .create(this.gameWidth + distance, this.gameHeight, `cactus-${obstacleNum}`)
+
         }
+
+        obstacle
+            .setImmovable()
+            .setOrigin(0,1)
     }
 
     handleGameStart() {
@@ -152,6 +166,7 @@ class PlayScene extends GameScene {
         this.physics.add.collider(this.obstacles, this.player, () => {
             this.isGameRunning = false
             this.physics.pause()
+            this.anims.pauseAll()
             this.player.die()
             this.gameOverContainer.setAlpha(1)
 
