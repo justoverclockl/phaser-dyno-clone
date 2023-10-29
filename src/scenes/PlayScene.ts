@@ -7,16 +7,18 @@ import {PRELOAD_CONFIG} from "../index";
 class PlayScene extends GameScene {
     player: Player;
     ground: Phaser.GameObjects.TileSprite;
-    obstacles: Phaser.Physics.Arcade.Group
+    obstacles: Phaser.Physics.Arcade.Group;
+    clouds: Phaser.GameObjects.Group;
     startTrigger: SpriteWithDynamicBody;
 
     spawnInterval: number = 1500
     spawnTime: number = 0
     gameSpeed: number = 2
 
-    gameOverContainer: Phaser.GameObjects.Container
-    gameOverText: Phaser.GameObjects.Image
-    restartText: Phaser.GameObjects.Image
+    gameOverContainer: Phaser.GameObjects.Container;
+    gameOverText: Phaser.GameObjects.Image;
+    restartText: Phaser.GameObjects.Image;
+    scoreText: Phaser.GameObjects.Text;
 
     constructor() {
         super('PlayScene');
@@ -28,6 +30,7 @@ class PlayScene extends GameScene {
         this.createObstacles()
         this.createGameOverContainer()
         this.createAnimations()
+        this.createScore()
 
         this.handleGameStart()
         this.handleObstacleCollision()
@@ -45,11 +48,18 @@ class PlayScene extends GameScene {
         }
 
         Phaser.Actions.IncX(this.obstacles.getChildren(), -this.gameSpeed)
+        Phaser.Actions.IncX(this.clouds.getChildren(), -0.5)
 
         // remove the obstacle from the array to avoid performance issues
         this.obstacles.getChildren().forEach((obstacle: SpriteWithDynamicBody) => {
             if (obstacle.getBounds().right < 0) {
                 this.obstacles.remove(obstacle)
+            }
+        })
+
+        this.clouds.getChildren().forEach((cloud: SpriteWithDynamicBody) => {
+            if (cloud.getBounds().right < 0) {
+                cloud.x = this.gameWidth + 30
             }
         })
 
@@ -64,6 +74,16 @@ class PlayScene extends GameScene {
         this.ground = this.add
             .tileSprite(0, this.gameHeight, 88, 26, 'ground')
             .setOrigin(0, 1)
+
+        this.clouds = this.add.group()
+
+        this.clouds = this.clouds.addMultiple([
+            this.add.image(this.gameWidth / 2, 170, 'cloud'),
+            this.add.image(this.gameWidth -80, 80, 'cloud'),
+            this.add.image(this.gameWidth / 1.3, 100, 'cloud'),
+        ])
+
+        this.clouds.setAlpha(0)
     }
 
     createObstacles() {
@@ -89,6 +109,15 @@ class PlayScene extends GameScene {
             frameRate: 6,
             repeat: -1
         })
+    }
+
+    createScore() {
+        this.scoreText = this.add.text(this.gameWidth, 0, '00000', {
+            fontSize: 30,
+            fontFamily: "Arial",
+            color: "#535353",
+            resolution: 5,
+        }).setOrigin(1,0).setAlpha(0)
     }
 
     spawnObstacles() {
@@ -142,6 +171,8 @@ class PlayScene extends GameScene {
                         groundRollOutEvent.remove()
                         this.ground.width = this.gameWidth
                         this.player.setVelocityX(0)
+                        this.clouds.setAlpha(1)
+                        this.scoreText.setAlpha(1)
                         this.isGameRunning = true
                     }
                 }
