@@ -11,6 +11,10 @@ class PlayScene extends GameScene {
     clouds: Phaser.GameObjects.Group;
     startTrigger: SpriteWithDynamicBody;
 
+    score: number = 0
+    scoreInterval: number = 100
+    scoreDeltaTime: number = 0
+
     spawnInterval: number = 1500
     spawnTime: number = 0
     gameSpeed: number = 2
@@ -41,6 +45,12 @@ class PlayScene extends GameScene {
         if (!this.isGameRunning) { return; }
 
         this.spawnTime += delta
+        this.scoreDeltaTime += delta
+
+        if (this.scoreDeltaTime >= this.scoreInterval) {
+            this.score++;
+            this.scoreDeltaTime = 0;
+        }
 
         if (this.spawnTime >= this.spawnInterval) {
             this.spawnObstacles()
@@ -202,6 +212,8 @@ class PlayScene extends GameScene {
             this.gameOverContainer.setAlpha(1)
 
             this.spawnTime = 0
+            this.scoreDeltaTime = 0
+            this.score = 0
             this.gameSpeed = 2
         })
     }
