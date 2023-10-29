@@ -60,6 +60,15 @@ class PlayScene extends GameScene {
         Phaser.Actions.IncX(this.obstacles.getChildren(), -this.gameSpeed)
         Phaser.Actions.IncX(this.clouds.getChildren(), -0.5)
 
+        const score = Array.from(String(this.score), Number)
+
+        // add 0 to the beginning of the array to keep the 5 digit display
+        for (let i = 0; i < 5 - String(this.score).length; i++) {
+            score.unshift(0)
+        }
+
+        this.scoreText.setText(score.join(''))
+
         // remove the obstacle from the array to avoid performance issues
         this.obstacles.getChildren().forEach((obstacle: SpriteWithDynamicBody) => {
             if (obstacle.getBounds().right < 0) {
