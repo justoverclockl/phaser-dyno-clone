@@ -18,6 +18,7 @@ class PlayScene extends GameScene {
     spawnInterval: number = 1500
     spawnTime: number = 0
     gameSpeed: number = 2
+    gameSpeedModifier: number = 1
 
     gameOverContainer: Phaser.GameObjects.Container;
     gameOverText: Phaser.GameObjects.Image;
@@ -50,6 +51,10 @@ class PlayScene extends GameScene {
         if (this.scoreDeltaTime >= this.scoreInterval) {
             this.score++;
             this.scoreDeltaTime = 0;
+
+            if (this.score % 200 === 0) {
+                this.gameSpeedModifier += 0.40
+            }
         }
 
         if (this.spawnTime >= this.spawnInterval) {
@@ -57,7 +62,7 @@ class PlayScene extends GameScene {
             this.spawnTime = 0
         }
 
-        Phaser.Actions.IncX(this.obstacles.getChildren(), -this.gameSpeed)
+        Phaser.Actions.IncX(this.obstacles.getChildren(), -this.gameSpeed * this.gameSpeedModifier)
         Phaser.Actions.IncX(this.clouds.getChildren(), -0.5)
 
         const score = Array.from(String(this.score), Number)
@@ -82,7 +87,7 @@ class PlayScene extends GameScene {
             }
         })
 
-        this.ground.tilePositionX += this.gameSpeed
+        this.ground.tilePositionX += (this.gameSpeed * this.gameSpeedModifier)
     }
 
     createPlayer() {
@@ -223,7 +228,7 @@ class PlayScene extends GameScene {
             this.spawnTime = 0
             this.scoreDeltaTime = 0
             this.score = 0
-            this.gameSpeed = 2
+            this.gameSpeedModifier = 1
         })
     }
 }
