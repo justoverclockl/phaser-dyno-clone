@@ -24,6 +24,7 @@ class PlayScene extends GameScene {
     gameOverText: Phaser.GameObjects.Image;
     restartText: Phaser.GameObjects.Image;
     scoreText: Phaser.GameObjects.Text;
+    highSCoreText: Phaser.GameObjects.Text;
 
     constructor() {
         super('PlayScene');
@@ -142,6 +143,13 @@ class PlayScene extends GameScene {
             color: "#535353",
             resolution: 5,
         }).setOrigin(1,0).setAlpha(0)
+
+        this.highSCoreText = this.add.text(this.scoreText.getBounds().left - 20, 0, '00000', {
+            fontSize: 30,
+            fontFamily: "Arial",
+            color: "#535353",
+            resolution: 5,
+        }).setOrigin(1,0).setAlpha(1)
     }
 
     spawnObstacles() {
