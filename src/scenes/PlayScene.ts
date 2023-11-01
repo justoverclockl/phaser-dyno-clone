@@ -149,7 +149,7 @@ class PlayScene extends GameScene {
             fontFamily: "Arial",
             color: "#535353",
             resolution: 5,
-        }).setOrigin(1,0).setAlpha(1)
+        }).setOrigin(1,0).setAlpha(0)
     }
 
     spawnObstacles() {
@@ -233,11 +233,21 @@ class PlayScene extends GameScene {
             this.player.die()
             this.gameOverContainer.setAlpha(1)
 
+            this.showHighScore()
+
             this.spawnTime = 0
             this.scoreDeltaTime = 0
             this.score = 0
             this.gameSpeedModifier = 1
         })
+    }
+
+    showHighScore() {
+        const newHighScore = this.highSCoreText.text.substring(this.highSCoreText.text.length - 5)
+        const newScore = Number(this.scoreText.text) > Number(newHighScore) ? this.scoreText.text : newHighScore
+
+        this.highSCoreText.setText('HI: ' + newScore)
+        this.highSCoreText.setAlpha(1)
     }
 }
 
