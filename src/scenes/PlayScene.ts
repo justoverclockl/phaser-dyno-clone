@@ -55,6 +55,8 @@ class PlayScene extends GameScene {
 
             if (this.score % 200 === 0) {
                 this.gameSpeedModifier += 0.40
+
+                this.blinkScoreText()
             }
         }
 
@@ -89,6 +91,16 @@ class PlayScene extends GameScene {
         })
 
         this.ground.tilePositionX += (this.gameSpeed * this.gameSpeedModifier)
+    }
+
+    blinkScoreText() {
+        this.tweens.add({
+            targets: this.scoreText,
+            duration: 100,
+            repeat: 3,
+            alpha: 0,
+            yoyo: true
+        })
     }
 
     createPlayer() {
