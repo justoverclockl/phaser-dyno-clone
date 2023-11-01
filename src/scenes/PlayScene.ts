@@ -20,6 +20,8 @@ class PlayScene extends GameScene {
     gameSpeed: number = 2
     gameSpeedModifier: number = 1
 
+    progressSound: Phaser.Sound.HTML5AudioSound;
+
     gameOverContainer: Phaser.GameObjects.Container;
     gameOverText: Phaser.GameObjects.Image;
     restartText: Phaser.GameObjects.Image;
@@ -41,6 +43,7 @@ class PlayScene extends GameScene {
         this.handleGameStart()
         this.handleObstacleCollision()
         this.handleGameRestart()
+        this.progressSound = this.sound.add('progress', {volume: 0.5}) as Phaser.Sound.HTML5AudioSound
     }
     // delta is time from the last frame, time is the entire time
     update(time: number, delta: number) {
@@ -55,6 +58,7 @@ class PlayScene extends GameScene {
 
             if (this.score % 200 === 0) {
                 this.gameSpeedModifier += 0.40
+                this.progressSound.play()
 
                 this.blinkScoreText()
             }

@@ -2,7 +2,10 @@ import GameScene from "../scenes/GameScene";
 
 class Player extends Phaser.Physics.Arcade.Sprite {
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
-    scene: GameScene
+    scene: GameScene;
+    jumpSound: Phaser.Sound.HTML5AudioSound;
+    hitSound: Phaser.Sound.HTML5AudioSound;
+
     constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 'dino-run');
 
@@ -24,7 +27,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             .setDepth(1)
 
         this.registerAnimations()
-
+        this.registerSounds()
     }
 
     update() {
@@ -36,6 +39,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         if (isSpaceOnceDown && onFloor) {
             this.setVelocityY(-1600)
+            this.jumpSound.play()
         }
 
         if (isDownBtnPressed && onFloor) {
@@ -84,9 +88,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         })
     }
 
+    registerSounds() {
+        this.jumpSound = this.scene.sound.add('jump', {volume: 0.5}) as Phaser.Sound.HTML5AudioSound;
+        this.hitSound = this.scene.sound.add('hit', {volume: 0.5}) as Phaser.Sound.HTML5AudioSound;
+    }
+
     die() {
         this.anims.pause()
         this.setTexture('dino-hurt')
+        this.hitSound.play()
     }
 }
 
